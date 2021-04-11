@@ -1,0 +1,27 @@
+{
+    "name": "chart-test",
+    "tree": {
+      "$className": "DataModel",
+      "ServerScriptService": {
+        "$className": "ServerScriptService",
+        "Chart": {
+          "$path": "src"
+        },
+        "sample.chart": {
+          "$path": "test/sample.chart.lua"
+        }
+      },
+      "TestService": {
+        "$className": "TestService",
+        "$properties": {
+          "ExecuteWithStudioRun": true
+        },
+        "TestEZ": {
+          "$path": "packages/TestEZ/src"
+        },
+        "TestRunner": {
+          "$path": "test/test-runner.server.lua"
+        }
+      }
+    }
+  }
