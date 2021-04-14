@@ -39,3 +39,4 @@ The notes array is sorted by the `Beat` property in ascending order.
 
 ## References
 - **[Note Chart Syntax]** @GameZelda (30th March 2007) - https://www.scorehero.com/forum/viewtopic.php?p=823618#823618
+- **Chorus** - Custom Clone Hero Charts - https://chorus.fightthe.pw/
