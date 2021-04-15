@@ -74,7 +74,7 @@ local function ParseChartData(chart: string, maxChords: number?)
 
         if categoryTitle == "SyncTrack" then
             categoryData = List.filter(categoryData, function(entry)
-                return tostring(entry[1]) == "0" and match(tostring(entry[2]), "B %d+") ~= nil
+                return match(tostring(entry[2]), "B %d+") ~= nil
             end)
         end
 
@@ -99,7 +99,7 @@ local function ParseChartData(chart: string, maxChords: number?)
                 -- that it keeps it within our requirements (NB. `maxChords` is "4" by default)
 
                 return {
-                    Sustain = values[3] > 0,
+                    Sustain = values[3] > 0 and values[3] or nil,
                     Chord = clamp(floor((values[2] + 1) % (maxChords + 1)), 1, maxChords),
                 }
             end)

@@ -31,7 +31,9 @@ function Chart:_populateWithChartData(chartData)
                 self.Resolution = tonumber(resolution)
             end
         elseif key == "SyncTrack" then
-            self.BPM = string.match(assert(values["0"], fmt(ERR_FIELD_MISSING, "0", "SyncTrack")), "%d+") / 1000
+            self.BPM = {
+                string.match(assert(values["0"], fmt(ERR_FIELD_MISSING, "0", "SyncTrack")), "%d+") / 1000,
+            }
         elseif ParseChartData.getDifficulty(key) ~= nil then
             local difficulty = ParseChartData.getDifficulty(key)
             difficulties[difficulty] = values
@@ -46,7 +48,7 @@ function Chart:_populateWithChartData(chartData)
     end
 
     local difficultyArrays = {}
-    local highestRelativeBeats = 0
+    local finalNote = 0
 
     for difficulty, values in pairs(difficulties) do
         local difficultyArray = {}
@@ -55,17 +57,25 @@ function Chart:_populateWithChartData(chartData)
             local beatsRelative = tonumber(key)
             local beat = beatsRelative / self.Resolution
 
-            if beatsRelative > highestRelativeBeats then
-                highestRelativeBeats = beatsRelative
-            end
-
-            table.insert(difficultyArray, {
+            local currentNote = {
                 BeatRelative = beatsRelative,
                 Beat = beat,
-                TimePosition = beat / self.BPM,
-                Sustain = value.Sustain,
+                TimePosition = (beat / self.BPM[1]) * 60,
+                Sustain = value.Sustain and {
+                    LengthRelative = value.Sustain,
+                    LengthBeats = value.Sustain / self.Resolution,
+                    TimeLength = ((value.Sustain / self.Resolution) / self.BPM[1]) * 60,
+                },
                 Chord = value.Chord,
-            })
+            }
+
+            table.insert(difficultyArray, currentNote)
+
+            local noteEnd = currentNote.TimePosition + (currentNote.Sustain and currentNote.Sustain.TimeLength or 0)
+
+            if finalNote < noteEnd then
+                finalNote = noteEnd
+            end
         end
 
         table.sort(difficultyArray, function(a, b)
@@ -76,7 +86,7 @@ function Chart:_populateWithChartData(chartData)
     end
 
     self.Difficulty = difficultyArrays
-    self.MaxDuration = (highestRelativeBeats / self.Resolution) / self.BPM
+    self.MaxDuration = finalNote
 end
 
 function Chart.is(object: any): boolean

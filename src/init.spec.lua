@@ -15,8 +15,8 @@ return function()
         local chart = Chart.new(SampleChart)
 
         it("calculates BPM and MaxDuration", function()
-            expect(chart.MaxDuration).to.be.near(1.038, .001)
-            expect(chart.BPM).to.equal(120)
+            expect(chart.MaxDuration).to.be.near(63.125, .001)
+            expect(chart.BPM[1]).to.equal(120)
         end)
 
         it("calculates timings for each note and maintains order", function()
@@ -27,7 +27,7 @@ return function()
 
             expect(easyNotes[1].Beat).to.equal(1)
             expect(easyNotes[1].Chord).to.equal(2)
-            expect(easyNotes[1].TimePosition).to.be.near(.008, .001)
+            expect(easyNotes[1].TimePosition).to.be.near(.5, .001)
         end)
 
         it("can be identified as a chart instance", function()
